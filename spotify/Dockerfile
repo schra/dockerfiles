@@ -1,41 +1,33 @@
-# Run spotify in a container
+# This file is originally by Jessie Frazelle and licensed under the MIT
+# license.
 #
-# docker run -d \
-#	-v /etc/localtime:/etc/localtime:ro \
-#	-v /tmp/.X11-unix:/tmp/.X11-unix \
-#	-e DISPLAY=unix$DISPLAY \
-#	--device /dev/snd:/dev/snd \
-#	-v $HOME/.spotify/config:/home/spotify/.config/spotify \
-#	-v $HOME/.spotify/cache:/home/spotify/spotify \
-#	--name spotify \
-#	jess/spotify
-#
-FROM debian:sid-slim
-LABEL maintainer "Jessie Frazelle <jess@linux.com>"
+# https://github.com/jessfraz/dockerfiles/blob/8ff991327fd1c68369c2fb576215d0eabffca0e1/spotify/Dockerfile
 
-RUN	apt-get update && apt-get install -y \
-	ca-certificates \
-	curl \
-	dirmngr \
-	gnupg \
-	--no-install-recommends \
-	&& curl -sS https://download.spotify.com/debian/pubkey_0D811D58.gpg | apt-key add -  \
-	&& echo "deb http://repository.spotify.com stable non-free" >> /etc/apt/sources.list.d/spotify.list \
-	&& apt-get update && apt-get install -y \
-	alsa-utils \
-	libgl1-mesa-dri \
-	libgl1-mesa-glx \
-	libpulse0 \
-	libsm6 \
-	spotify-client \
-	xdg-utils \
-	--no-install-recommends \
-	&& rm -rf /var/lib/apt/lists/*
+FROM debian:sid-slim
+
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends \
+    ca-certificates \
+    curl \
+    dirmngr \
+    gnupg \
+ && curl -sS https://download.spotify.com/debian/pubkey_0D811D58.gpg | apt-key add -  \
+ && echo "deb http://repository.spotify.com stable non-free" >> /etc/apt/sources.list.d/spotify.list \
+ && apt-get update \
+ && apt-get install -y --no-install-recommends \
+    alsa-utils \
+    libgl1-mesa-dri \
+    libgl1-mesa-glx \
+    libpulse0 \
+    libsm6 \
+    spotify-client \
+    xdg-utils \
+ && rm -rf /var/lib/apt/lists/*
 
 ENV HOME /home/spotify
 RUN useradd --create-home --home-dir $HOME spotify \
-	&& gpasswd -a spotify audio \
-	&& chown -R spotify:spotify $HOME
+ && gpasswd -a spotify audio \
+ && chown -R spotify:spotify $HOME
 
 WORKDIR $HOME
 USER spotify
@@ -43,5 +35,5 @@ USER spotify
 # make search bar text better
 RUN echo "QLineEdit { color: #000 }" > /home/spotify/spotify-override.css
 
-ENTRYPOINT	[ "spotify" ]
+ENTRYPOINT [ "spotify" ]
 CMD [ "-stylesheet=/home/spotify/spotify-override.css" ]
