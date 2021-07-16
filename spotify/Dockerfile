@@ -22,6 +22,9 @@ RUN apt-get update \
     libsm6 \
     spotify-client \
     xdg-utils \
+    fonts-noto \
+    fonts-noto-cjk \
+    fonts-noto-color-emoji \
  && rm -rf /var/lib/apt/lists/*
 
 ENV HOME /home/spotify
