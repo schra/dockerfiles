@@ -15,7 +15,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - id: set-matrix
-      run: echo "::set-output name=matrix::[$(for dir in */; do echo -n \"${dir%/}\",; done | sed '$s/,$//')]"
+      run: echo "::set-output name=matrix::$(_scripts/list.py .)"
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
 
@@ -33,4 +33,4 @@ jobs:
     - name: Log in to registry
       run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
     - name: Build and push image
-      run: ./build.sh --image "${{ matrix.image }}" --push "ghcr.io/${{ github.repository_owner }}"
+      run: _scripts/build.sh --image "${{ matrix.image }}" --push "ghcr.io/${{ github.repository_owner }}"

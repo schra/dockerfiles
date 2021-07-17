@@ -34,7 +34,7 @@ image_name=$(basename "$(realpath "$image_path")")
 if [[ -v registry ]]; then
   # e.g. in spotify/ we need --no-cache because the Spotify app might
   # update without the parent image updating
-  docker build "$image_path" --pull --no-cache --tag "$registry/$image_name"
+  docker build "$image_path" --pull --tag "$registry/$image_name" --no-cache --build-arg registry="$registry/"
   docker push "$registry/$image_name"
 else
   docker build "$image_path" --pull --tag "$image_name"
