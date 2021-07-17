@@ -15,22 +15,24 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - id: set-matrix
-      run: echo "::set-output name=matrix::$(_scripts/list.py .)"
+      run: echo "::set-output name=matrix::$(_scripts/info.py .)"
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
 
   push:
-    needs: list-images
+    needs:
+    - list-images
+    - "${{ matrix.info.dependency }}"
     runs-on: ubuntu-latest
     permissions:
       packages: write
       contents: read
     strategy:
       matrix:
-        image: ${{ fromJson(needs.list-images.outputs.matrix) }}
+        info: ${{ fromJson(needs.list-images.outputs.matrix) }}
     steps:
     - uses: actions/checkout@v2
     - name: Log in to registry
       run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
     - name: Build and push image
-      run: _scripts/build.sh --image "${{ matrix.image }}" --push "ghcr.io/${{ github.repository_owner }}"
+      run: _scripts/build.sh --image "${{ matrix.info.name }}" --push "ghcr.io/${{ github.repository_owner }}"
