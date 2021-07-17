@@ -1,0 +1,36 @@
+# See
+# https://docs.github.com/en/packages/managing-github-packages-using-github-actions-workflows/publishing-and-installing-a-package-with-github-actions
+
+name: Build and push images
+
+on:
+  schedule:
+    # every day at 03:00
+  - cron: '0 3 * * *'
+  push:
+
+jobs:
+  list-images:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - id: set-matrix
+      run: echo "::set-output name=matrix::[$(for dir in */; do echo -n \"${dir%/}\",; done | sed '$s/,$//')]"
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+
+  push:
+    needs: list-images
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    strategy:
+      matrix:
+        image: ${{ fromJson(needs.list-images.outputs.matrix) }}
+    steps:
+    - uses: actions/checkout@v2
+    - name: Log in to registry
+      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+    - name: Build and push image
+      run: ./build.sh --image "${{ matrix.image }}" --push "ghcr.io/${{ github.repository_owner }}"
