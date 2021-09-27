@@ -8,4 +8,4 @@ Usage::
   # Download the package database, otherwise aurman yields weird errors.
   pacman -Sy
 
-  su aurman -c 'aurman -S [package-to-install]'
+  su makepkg -c 'aurman -S [package-to-install]'
