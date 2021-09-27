@@ -37,5 +37,5 @@ if [[ -v registry ]]; then
   docker build "$image_path" --pull --tag "$registry/$image_name" --no-cache --build-arg registry="$registry/"
   docker push "$registry/$image_name"
 else
-  docker build "$image_path" --pull --tag "$image_name"
+  docker build "$image_path" --pull --tag "$image_name" --build-arg registry=
 fi
