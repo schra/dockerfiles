@@ -2,8 +2,8 @@ name: Build and push images
 
 on:
   schedule:
-    # every day at 03:00
-  - cron: '0 3 * * *'
+    # Every week (on Sunday) at 03:00
+  - cron: '0 3 * * 0'
   push:
 
 jobs:
