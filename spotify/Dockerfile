@@ -1,4 +1,4 @@
-# This file is originally by Jessie Frazelle and licensed under the MIT
+# This file is originally by Jessie Frazelle and is licensed under the MIT
 # license.
 #
 # https://github.com/jessfraz/dockerfiles/blob/8ff991327fd1c68369c2fb576215d0eabffca0e1/spotify/Dockerfile
