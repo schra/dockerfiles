@@ -5,6 +5,7 @@ on:
     # Every week (on Sunday) at 03:00
   - cron: '0 3 * * 0'
   push:
+  workflow_dispatch:
 
 jobs:
   generate-jobs:
