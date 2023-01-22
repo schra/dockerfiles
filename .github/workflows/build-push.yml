@@ -8,13 +8,12 @@ on:
   workflow_dispatch:
 
 jobs:
-  generate-jobs:
-    name: Generate Jobs
+  clean-images:
+    name: Delete untagged Docker images
     runs-on: ubuntu-latest
     steps:
 
-    - name: Delete untagged Docker images
-      uses: snok/container-retention-policy@v1
+    - uses: snok/container-retention-policy@v1
       with:
         image-names: "*"
         cut-off: A week ago UTC
@@ -22,6 +21,11 @@ jobs:
         keep-at-least: 1
         untagged-only: true
         token: ${{ secrets.PAT }}
+
+  generate-jobs:
+    name: Generate Jobs
+    runs-on: ubuntu-latest
+    steps:
 
     - uses: actions/checkout@v2
     - uses: actions/setup-python@v2
