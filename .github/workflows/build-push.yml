@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: actions/setup-python@v2
       with:
         # We are using "pathlib" which requires at least 3.9
@@ -52,7 +52,7 @@ jobs:
       matrix:
         dockerfiles: ${{ fromJson(needs.generate-jobs.outputs.matrix) }}
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Log in to registry
       # https://docs.github.com/en/packages/managing-github-packages-using-github-actions-workflows/publishing-and-installing-a-package-with-github-actions
