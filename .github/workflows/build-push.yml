@@ -2,7 +2,7 @@ name: Build and push images
 
 on:
   schedule:
-    # Every week (on Sunday) at 03:00
+  # Every week (on Sunday) at 03:00
   - cron: '0 3 * * 0'
   push:
   workflow_dispatch:
