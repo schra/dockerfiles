@@ -33,7 +33,7 @@ image_name=$(basename "$(realpath "$image_path")")
 
 # TODO: The tag file is just a quick hack.
 if [ -f "$image_path/tags" ]; then
-  tags=($(cat "$image_path/tags"))
+  mapfile -t tags < "$image_path"/tags
 else
   tags=(latest)
 fi
