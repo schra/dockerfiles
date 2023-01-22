@@ -56,7 +56,7 @@ jobs:
 
     - name: Log in to registry
       # https://docs.github.com/en/packages/managing-github-packages-using-github-actions-workflows/publishing-and-installing-a-package-with-github-actions
-      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      run: docker login ghcr.io --username "${{ github.actor }}" --password-stdin <<< "${{ secrets.GITHUB_TOKEN }}"
 
     - name: Build and push images
       run: |
@@ -72,5 +72,5 @@ jobs:
           echo
           echo
           echo
-          _scripts/build.sh --image "$dockerfile" --push "ghcr.io/${{ github.repository_owner }}"
+          _scripts/build.sh --image "$dockerfile" --push ghcr.io/"${{ github.repository_owner }}"
         done
