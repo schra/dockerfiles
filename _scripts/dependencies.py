@@ -13,7 +13,7 @@ import graphlib
 
 
 def dockerfile_dependencies(dockerfile_path):
-    deps = set([])
+    deps = set()
     for line in dockerfile_path.read_text().splitlines():
         if line.startswith("FROM ${registry}"):
             deps.add(line.split("}")[-1])
@@ -30,7 +30,7 @@ def dockerfiles_dependency_graph(repo_path):
 
 def dfs(graph, node_to_visit, visited_nodes=None):
     if visited_nodes is None:
-        visited_nodes = set([])
+        visited_nodes = set()
     visited_nodes.add(node_to_visit)
     for node in graph[node_to_visit]:
         if node not in visited_nodes:
@@ -49,8 +49,8 @@ def make_undirected(graph):
     # now merge the graphs
     undirected_graph = {}
     for node in set(graph.keys()).union(reversed_graph.keys()):
-        undirected_graph[node] = graph.get(node, set([])).union(
-            reversed_graph.get(node, set([])))
+        undirected_graph[node] = graph.get(node, set()).union(
+            reversed_graph.get(node, set()))
     return undirected_graph
 
 
