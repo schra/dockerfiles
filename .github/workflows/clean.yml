@@ -1,0 +1,22 @@
+name: Delete untagged Docker images
+
+on:
+  schedule:
+  # Every week (on Sunday) at 03:00
+  - cron: '0 3 * * 0'
+  workflow_dispatch:
+
+jobs:
+  clean-images:
+    name: 
+    runs-on: ubuntu-latest
+    steps:
+
+    - uses: snok/container-retention-policy@v1
+      with:
+        image-names: "*"
+        cut-off: A week ago UTC
+        account-type: personal
+        keep-at-least: 1
+        untagged-only: true
+        token: ${{ secrets.PAT }}
