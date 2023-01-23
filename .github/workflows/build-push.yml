@@ -20,7 +20,8 @@ jobs:
     - id: set-matrix
       run: |
         deps=$(_scripts/dependencies.py --github-actions-matrix .)
-        echo "::set-output name=matrix::$deps"
+        echo "matrix=$deps" >> "$GITHUB_OUTPUT"
+
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
 
