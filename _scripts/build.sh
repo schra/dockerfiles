@@ -46,7 +46,9 @@ for tag in "${tags[@]}"; do
     docker build "$image_path" --pull --tag "$registry/$image_name:$tag" --no-cache --build-arg registry="$registry/" --build-arg "tag=$tag"
     docker push "$registry/$image_name:$tag"
   else
-    docker build "$image_path" --pull --tag "$image_name" --build-arg registry= --build-arg "tag=$tag"
+    # We can't "--pull" here because in case of aurman it depends on makepkg
+    # and makepkg cannot be pulled, because it's a custom image of mine
+    docker build "$image_path" --tag "$image_name" --build-arg registry= --build-arg "tag=$tag"
   fi
 
 done
